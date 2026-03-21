@@ -1,0 +1,59 @@
+:root {
+  --bg-void: #010409;
+  --bg-surface: #0D1117;
+  --bg-elevated: #161B22;
+  --border-dim: #1C2333;
+  --border-mid: #2D333B;
+  --text-primary: #F0F6FC;
+  --text-secondary: #C9D1D9;
+  --text-muted: #8B949E;
+  --text-faint: #4A5568;
+  --accent-blue: #58A6FF;
+  --accent-green: #3FB950;
+  --accent-red: #FF2E2E;
+  --accent-orange: #FF8C00;
+  --accent-yellow: #FFD000;
+  --accent-purple: #A855F7;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+@keyframes grid-scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(88, 166, 255, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(88, 166, 255, 0.25); }
+}
+
+a { text-decoration: none; color: inherit; }
