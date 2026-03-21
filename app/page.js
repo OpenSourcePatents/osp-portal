@@ -84,7 +84,7 @@ const APPS = [
       { label: 'Scoring', value: 'Real-time Anomaly' },
     ],
     tags: ['Congress', 'Insider Trading', 'Donor Influence'],
-    url: null,
+    url: 'https://congresswatch.vercel.app',
   },
   {
     id: 'canaan-roads',
