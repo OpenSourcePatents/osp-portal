@@ -26,7 +26,7 @@ const APPS = [
       { label: 'Coverage', value: 'All US Ports' },
     ],
     tags: ['Trafficking', 'Port Security', 'Whistleblower'],
-    url: https://dockwatch-iakybmowx-opensourcepatents-projects.vercel.app, // ← Replace with deployed URL
+    url: 'https://dockwatch.vercel.app', // ← Replace with deployed URL
   },
   {
     id: 'sentinel',
