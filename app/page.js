@@ -155,7 +155,7 @@ function StatusIndicator() {
         fontFamily: 'var(--font-mono)', fontWeight: 600,
         letterSpacing: '0.08em',
       }}>
-        ALL SYSTEMS LIVE
+        SYSTEMS IN DEVELOPMENT
       </span>
     </span>
   )
