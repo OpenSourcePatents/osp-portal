@@ -26,7 +26,7 @@ const APPS = [
       { label: 'Coverage', value: 'All US Ports' },
     ],
     tags: ['Trafficking', 'Port Security', 'Whistleblower'],
-    url: 'https://dockwatch.vercel.app', // ← Replace with deployed URL
+    url: 'https://dockwatch.vercel.app', // 
   },
   {
     id: 'sentinel',
@@ -104,7 +104,7 @@ const APPS = [
       { label: 'Reporting', value: 'Citizen-Driven' },
     ],
     tags: ['Roads', 'Local Gov', 'Canaan NH'],
-    url: 'canaanroads.com',
+    url: 'https://canaanroads.com',
   },
   {
     id: 'canaan-budget',
