@@ -104,7 +104,7 @@ const APPS = [
       { label: 'Reporting', value: 'Citizen-Driven' },
     ],
     tags: ['Roads', 'Local Gov', 'Canaan NH'],
-    url: null,
+    url: 'canaanroads.com',
   },
   {
     id: 'canaan-budget',
