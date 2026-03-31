@@ -1,11 +1,12 @@
 import './globals.css'
+import { AuthProvider } from '@/components/AuthProvider'
 
 export const metadata = {
-  title: 'O.S.P. Portal — OpenSourcePatents',
-  description: 'Civic Intelligence Network — Open source tools for public accountability. No royalty or charge. Ever.',
+  title: 'O.S.P. — OpenSourcePatents',
+  description: 'No royalty or charge. Ever. Open source patents and civic intelligence tools for public accountability.',
   openGraph: {
-    title: 'O.S.P. Portal — OpenSourcePatents',
-    description: 'Civic Intelligence Network — Open source tools for public accountability.',
+    title: 'O.S.P. — OpenSourcePatents',
+    description: 'No royalty or charge. Ever. Open source patents and civic intelligence tools.',
     type: 'website',
   },
 }
@@ -19,7 +20,11 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   )
 }

@@ -1,422 +1,253 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import GridBackground from '@/components/GridBackground'
+import Nav from '@/components/Nav'
 
-// ═══════════════════════════════════════════════════════════
-// APP REGISTRY
-// Update `url` for each app as you deploy them.
-// Set url to null for "Coming Soon" state.
-// ═══════════════════════════════════════════════════════════
-const APPS = [
-  {
-    id: 'dockwatch',
-    name: 'DOCKWATCH',
-    subtitle: 'COMMUNITY PORT INTELLIGENCE',
-    description: 'Anonymous citizen reporting of screaming, suspicious activity, and potential trafficking at shipping docks and port areas. No police, no news — just workers and witnesses.',
-    color: '#FF2E2E',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-    ),
-    stats: [
-      { label: 'Anonymous Reports', value: 'Live Feed' },
-      { label: 'Corroboration', value: 'Witness Verified' },
-      { label: 'Coverage', value: 'All US Ports' },
-    ],
-    tags: ['Trafficking', 'Port Security', 'Whistleblower'],
-    url: 'https://dockwatch.vercel.app', // 
-  },
-  {
-    id: 'sentinel',
-    name: 'SENTINEL',
-    subtitle: 'GOVERNMENT ACCOUNTABILITY DETECTION',
-    description: 'Automated detection of corruption patterns, conflicts of interest, and anomalous behavior across government officials. Cross-references financial disclosures, voting records, and public contracts.',
-    color: '#A855F7',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-    ),
-    stats: [
-      { label: 'Data Sources', value: 'FEC + STOCK Act' },
-      { label: 'Detection', value: 'Anomaly Scoring' },
-      { label: 'Scope', value: 'Federal + State' },
-    ],
-    tags: ['Corruption', 'Transparency', 'Accountability'],
-    url: null,
-  },
-  {
-    id: 'narc',
-    name: 'NARC',
-    subtitle: 'OPIOID CRISIS GEOSPATIAL INTELLIGENCE',
-    description: 'Real-time geospatial mapping of opioid distribution patterns, overdose clusters, and supply chain anomalies. Community-sourced intelligence overlaid with public health data.',
-    color: '#F59E0B',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
-        <circle cx="12" cy="10" r="3"/>
-      </svg>
-    ),
-    stats: [
-      { label: 'Mapping', value: 'Live Hotspots' },
-      { label: 'Sources', value: 'EMS + CDC + Community' },
-      { label: 'Tracking', value: 'Supply Routes' },
-    ],
-    tags: ['Opioid Crisis', 'Public Health', 'Geospatial'],
-    url: null,
-  },
-  {
-    id: 'congresswatch',
-    name: 'CONGRESSWATCH',
-    subtitle: 'CONGRESSIONAL ANOMALY SCORING',
-    description: 'Anomaly scoring of congressional members based on voting patterns, donor influence, insider trading signals, and deviation from constituent interests.',
-    color: '#3B82F6',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-        <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
-      </svg>
-    ),
-    stats: [
-      { label: 'Members', value: '535 Tracked' },
-      { label: 'Data', value: 'FEC + ProPublica' },
-      { label: 'Scoring', value: 'Real-time Anomaly' },
-    ],
-    tags: ['Congress', 'Insider Trading', 'Donor Influence'],
-    url: 'https://congresswatch.vercel.app',
-  },
-  {
-    id: 'canaan-roads',
-    name: 'CANAAN ROAD WATCH',
-    subtitle: 'CITIZEN ROAD ACCOUNTABILITY',
-    description: 'Community reporting and accountability platform for road conditions in Canaan, NH. Track potholes, frost heaves, grading failures. Performance scoring holds the highway department accountable.',
-    color: '#EF4444',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-        <path d="M18 6L6 18M6 6l12 12"/>
-        <path d="M4 4h16v16H4z" strokeWidth="1.5"/>
-      </svg>
-    ),
-    stats: [
-      { label: 'Coverage', value: 'Canaan, NH' },
-      { label: 'Framework', value: 'Funding Accountability' },
-      { label: 'Reporting', value: 'Citizen-Driven' },
-    ],
-    tags: ['Roads', 'Local Gov', 'Canaan NH'],
-    url: 'https://canaanroads.com',
-  },
-  {
-    id: 'canaan-budget',
-    name: 'CANAAN BUDGET WATCH',
-    subtitle: 'YOUR TAX DOLLARS — DIGITIZED',
-    description: 'Full transparency dashboard for Canaan, NH town budget. Every department, every salary, every dollar — sourced from public records under NH RSA 91-A.',
-    color: '#22C55E',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-        <line x1="12" y1="1" x2="12" y2="23"/>
-        <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-      </svg>
-    ),
-    stats: [
-      { label: '2026 Budget', value: '$6.37M' },
-      { label: 'Source', value: 'RSA 91-A Public Records' },
-      { label: 'Detail', value: 'Every Position' },
-    ],
-    tags: ['Budget', 'Salaries', 'Canaan NH'],
-    url: null,
-  },
+const SECTIONS = [
+  { href: '/civic', label: 'CIVIC ARM', desc: 'Public accountability tools', color: '#3FB950', icon: '◈' },
+  { href: '/mission', label: 'MISSION', desc: 'Why we exist', color: '#58A6FF', icon: '◎' },
+  { href: '/services', label: 'SERVICES', desc: 'FundForge & DraftProSe', color: '#A855F7', icon: '⬡' },
+  { href: '/patents', label: 'PATENTS', desc: 'Open defense portfolio', color: '#FF8C00', icon: '△' },
+  { href: '/voice', label: 'YOUR VOICE', desc: 'Speak. Be heard.', color: '#FFD000', icon: '◉' },
 ]
 
-function LiveClock() {
-  const [time, setTime] = useState(null)
-  useEffect(() => {
-    setTime(new Date())
-    const t = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(t)
-  }, [])
-  if (!time) return null
+function GlowLogo() {
   return (
-    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-faint)' }}>
-      {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+    <div style={{
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 24,
+    }}>
+      {/* Outer glow */}
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 300,
+        height: 300,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(88,166,255,0.12) 0%, rgba(88,166,255,0.04) 40%, transparent 70%)',
+        animation: 'glow-pulse 3s ease-in-out infinite',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Logo block */}
+      <div style={{
+        width: 140,
+        height: 140,
+        borderRadius: 24,
+        background: 'linear-gradient(135deg, #58A6FF 0%, #1F6FEB 40%, #A855F7 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        boxShadow: '0 0 60px rgba(88,166,255,0.25), 0 0 120px rgba(88,166,255,0.1)',
+        animation: 'glow-pulse 3s ease-in-out infinite',
+      }}>
+        <span style={{
+          fontFamily: 'var(--font-mono)',
+          fontWeight: 800,
+          fontSize: 32,
+          color: '#fff',
+          letterSpacing: '0.08em',
+        }}>
+          O.S.P.
+        </span>
+      </div>
+
+      {/* Title */}
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{
+          margin: 0,
+          fontSize: 28,
+          fontWeight: 800,
+          color: 'var(--text-primary)',
+          letterSpacing: '-0.02em',
+          fontFamily: 'var(--font-body)',
+        }}>
+          OpenSourcePatents
+        </h1>
+        <div style={{
+          marginTop: 8,
+          fontSize: 11,
+          fontFamily: 'var(--font-mono)',
+          letterSpacing: '0.2em',
+          color: 'var(--text-faint)',
+        }}>
+          CIVIC INTELLIGENCE NETWORK
+        </div>
+      </div>
     </div>
   )
 }
 
-function StatusIndicator() {
-  return (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      <span style={{
-        width: 6, height: 6, borderRadius: '50%', background: 'var(--accent-green)',
-        animation: 'pulse-dot 2s ease-in-out infinite',
-      }} />
-      <span style={{
-        color: 'var(--accent-green)', fontSize: 11,
-        fontFamily: 'var(--font-mono)', fontWeight: 600,
-        letterSpacing: '0.08em',
-      }}>
-        SYSTEMS IN DEVELOPMENT
-      </span>
-    </span>
-  )
-}
-
-function AppCard({ app, index }) {
+function SectionCard({ section, index }) {
   const [hovered, setHovered] = useState(false)
-  const isDeployed = !!app.url
-
-  const handleClick = () => {
-    if (isDeployed) {
-      window.open(app.url, '_blank', 'noopener,noreferrer')
-    }
-  }
 
   return (
-    <div
-      onClick={handleClick}
+    <Link
+      href={section.href}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      role={isDeployed ? 'link' : undefined}
       style={{
-        background: hovered ? 'var(--bg-surface)' : '#080B10',
-        border: `1px solid ${hovered ? app.color + '44' : 'var(--border-dim)'}`,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 16,
+        padding: '18px 22px',
+        background: hovered ? 'var(--bg-surface)' : 'rgba(13,17,23,0.6)',
+        border: `1px solid ${hovered ? section.color + '44' : 'var(--border-dim)'}`,
         borderRadius: 10,
-        padding: '22px 20px 18px',
-        cursor: isDeployed ? 'pointer' : 'default',
+        cursor: 'pointer',
         transition: 'all 0.3s ease',
-        animation: `fade-up 0.5s ease ${index * 0.1}s both`,
+        animation: `fade-up 0.5s ease ${0.2 + index * 0.1}s both`,
         position: 'relative',
         overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
       }}
     >
-      {/* Hover glow */}
       {hovered && (
         <div style={{
-          position: 'absolute', top: -50, right: -50,
-          width: 150, height: 150, borderRadius: '50%',
-          background: `radial-gradient(circle, ${app.color}12, transparent)`,
+          position: 'absolute',
+          inset: 0,
+          background: `radial-gradient(circle at 20% 50%, ${section.color}08, transparent 60%)`,
           pointerEvents: 'none',
-          transition: 'opacity 0.3s',
         }} />
       )}
-
-      {/* Top row: icon + status */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, position: 'relative' }}>
-        <div style={{
-          width: 40, height: 40, borderRadius: 8,
-          background: `linear-gradient(135deg, ${app.color}, ${app.color}77)`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: hovered ? `0 0 24px ${app.color}33` : 'none',
-          transition: 'box-shadow 0.3s',
-        }}>
-          {app.icon}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-          {isDeployed ? (
-            <span style={{
-              display: 'flex', alignItems: 'center', gap: 4,
-              color: 'var(--accent-green)', fontSize: 9,
-              fontFamily: 'var(--font-mono)', fontWeight: 700,
-              letterSpacing: '0.12em',
-            }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--accent-green)' }} />
-              DEPLOYED
-            </span>
-          ) : (
-            <span style={{
-              color: 'var(--accent-yellow)', fontSize: 9,
-              fontFamily: 'var(--font-mono)', fontWeight: 700,
-              letterSpacing: '0.12em',
-            }}>
-              DEPLOY PENDING
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Title block */}
-      <h2 style={{
-        margin: '0 0 3px', fontSize: 17, fontWeight: 800,
-        color: 'var(--text-primary)', letterSpacing: '0.01em',
-        lineHeight: 1.2,
-      }}>
-        {app.name}
-      </h2>
       <div style={{
-        fontSize: 9, color: app.color, letterSpacing: '0.12em',
-        fontWeight: 700, marginBottom: 10,
-        fontFamily: 'var(--font-mono)',
+        width: 44,
+        height: 44,
+        borderRadius: 10,
+        background: `linear-gradient(135deg, ${section.color}22, ${section.color}08)`,
+        border: `1px solid ${section.color}22`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 20,
+        flexShrink: 0,
+        transition: 'all 0.3s',
+        boxShadow: hovered ? `0 0 20px ${section.color}22` : 'none',
       }}>
-        {app.subtitle}
+        {section.icon}
       </div>
-
-      {/* Description */}
-      <p style={{
-        margin: '0 0 14px', fontSize: 12,
-        color: 'var(--text-muted)', lineHeight: 1.65,
-        flex: 1,
-      }}>
-        {app.description}
-      </p>
-
-      {/* Stats row */}
-      <div style={{
-        display: 'flex', flexDirection: 'column', gap: 6,
-        marginBottom: 14,
-      }}>
-        {app.stats.map((s, i) => (
-          <div key={i} style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '4px 0',
-            borderBottom: i < app.stats.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
-          }}>
-            <span style={{ fontSize: 10, color: 'var(--text-faint)', letterSpacing: '0.04em' }}>{s.label}</span>
-            <span style={{
-              fontSize: 10, color: app.color, fontWeight: 700,
-              fontFamily: 'var(--font-mono)', letterSpacing: '0.02em',
-            }}>{s.value}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Tags */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        {app.tags.map((tag, i) => (
-          <span key={i} style={{
-            background: 'var(--bg-elevated)', border: '1px solid var(--border-mid)',
-            borderRadius: 4, padding: '3px 8px',
-            fontSize: 9, color: 'var(--text-muted)',
-            fontFamily: 'var(--font-mono)', letterSpacing: '0.04em',
-          }}>
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Launch indicator */}
-      {isDeployed && hovered && (
+      <div style={{ flex: 1, position: 'relative' }}>
         <div style={{
-          position: 'absolute', bottom: 12, right: 14,
-          color: app.color, fontSize: 10, fontWeight: 700,
-          fontFamily: 'var(--font-mono)', letterSpacing: '0.1em',
-          display: 'flex', alignItems: 'center', gap: 4,
+          fontSize: 13,
+          fontWeight: 700,
+          color: hovered ? section.color : 'var(--text-primary)',
+          fontFamily: 'var(--font-mono)',
+          letterSpacing: '0.06em',
+          transition: 'color 0.3s',
         }}>
-          LAUNCH →
+          {section.label}
         </div>
-      )}
-    </div>
+        <div style={{
+          fontSize: 11,
+          color: 'var(--text-muted)',
+          marginTop: 2,
+        }}>
+          {section.desc}
+        </div>
+      </div>
+      <span style={{
+        fontSize: 14,
+        color: hovered ? section.color : 'var(--text-faint)',
+        transition: 'all 0.3s',
+        transform: hovered ? 'translateX(4px)' : 'translateX(0)',
+      }}>
+        →
+      </span>
+    </Link>
   )
 }
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   return (
     <div style={{ minHeight: '100vh', position: 'relative' }}>
-      {/* Animated grid background */}
-      <div style={{
-        position: 'fixed', inset: 0,
-        backgroundImage: 'linear-gradient(rgba(88,166,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(88,166,255,0.025) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
-        animation: 'grid-scan 4s linear infinite',
-        pointerEvents: 'none',
-      }} />
+      <GridBackground />
+      <Nav />
 
-      {/* Header */}
-      <header style={{
-        position: 'relative', zIndex: 1,
-        borderBottom: '1px solid var(--border-dim)',
-        background: 'linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-void) 100%)',
-        padding: '20px 24px',
+      <main style={{
+        position: 'relative',
+        zIndex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 'calc(100vh - 57px)',
+        padding: '60px 24px',
+        gap: 48,
       }}>
+        {/* Hero */}
         <div style={{
-          maxWidth: 960, margin: '0 auto',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          flexWrap: 'wrap', gap: 16,
+          animation: mounted ? 'fade-up 0.6s ease both' : 'none',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 10,
-              background: 'linear-gradient(135deg, #58A6FF 0%, #1F6FEB 50%, #A855F7 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 12, fontWeight: 800, color: '#fff',
-              fontFamily: 'var(--font-mono)', letterSpacing: '0.08em',
-              animation: 'glow-pulse 3s ease-in-out infinite',
-            }}>
-              O.S.P.
-            </div>
-            <div>
-              <h1 style={{
-                margin: 0, fontSize: 22, fontWeight: 800,
-                color: 'var(--text-primary)', letterSpacing: '-0.02em',
-              }}>
-                O.S.P. PORTAL
-              </h1>
-              <div style={{
-                fontSize: 10, color: 'var(--text-faint)',
-                letterSpacing: '0.18em',
-                fontFamily: 'var(--font-mono)',
-              }}>
-                OPENSOURCEPATENTS — CIVIC INTELLIGENCE NETWORK
-              </div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-            <StatusIndicator />
-            <LiveClock />
-          </div>
+          <GlowLogo />
         </div>
-      </header>
 
-      {/* Main */}
-      <main style={{ position: 'relative', zIndex: 1, maxWidth: 960, margin: '0 auto', padding: '28px 24px 60px' }}>
-        {/* Mission banner */}
+        {/* Tagline */}
         <div style={{
-          background: 'linear-gradient(135deg, rgba(88,166,255,0.04), rgba(168,85,247,0.04))',
-          border: '1px solid rgba(88,166,255,0.1)',
-          borderRadius: 10, padding: '18px 24px', marginBottom: 28,
           textAlign: 'center',
+          animation: mounted ? 'fade-up 0.6s ease 0.15s both' : 'none',
         }}>
           <p style={{
-            fontSize: 13, color: 'var(--accent-blue)',
-            fontWeight: 600, lineHeight: 1.7, margin: 0,
+            fontSize: 16,
+            color: 'var(--accent-blue)',
+            fontWeight: 600,
+            margin: 0,
+            lineHeight: 1.6,
           }}>
-            "Just a regular guy releasing open source patents on whatever I can think of to help the world.
-            <br />No royalty or charge. Ever."
+            &ldquo;No royalty or charge. Ever.&rdquo;
           </p>
           <p style={{
-            fontSize: 10, color: 'var(--text-faint)', margin: '8px 0 0',
-            fontFamily: 'var(--font-mono)', letterSpacing: '0.1em',
+            fontSize: 12,
+            color: 'var(--text-faint)',
+            margin: '8px 0 0',
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.06em',
           }}>
-            SELECT AN INTELLIGENCE MODULE TO LAUNCH
+            Open source patents &amp; civic tools — free forever
           </p>
         </div>
 
-        {/* App grid */}
+        {/* Section navigation */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
-          gap: 16,
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: 12,
+          width: '100%',
+          maxWidth: 700,
         }}>
-          {APPS.map((app, i) => (
-            <AppCard key={app.id} app={app} index={i} />
+          {SECTIONS.map((section, i) => (
+            <SectionCard key={section.href} section={section} index={i} />
           ))}
         </div>
       </main>
 
       {/* Footer */}
       <footer style={{
-        position: 'relative', zIndex: 1,
-        textAlign: 'center', padding: '0 24px 32px',
+        position: 'relative',
+        zIndex: 1,
+        textAlign: 'center',
+        padding: '0 24px 32px',
       }}>
         <div style={{
-          maxWidth: 960, margin: '0 auto',
+          maxWidth: 700,
+          margin: '0 auto',
           borderTop: '1px solid var(--border-dim)',
           paddingTop: 20,
         }}>
           <p style={{
-            color: 'var(--border-mid)', fontSize: 10,
-            fontFamily: 'var(--font-mono)', letterSpacing: '0.1em',
+            color: 'var(--border-mid)',
+            fontSize: 10,
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.1em',
             lineHeight: 1.8,
           }}>
             OpenSourcePatents | CC0 Public Domain |{' '}

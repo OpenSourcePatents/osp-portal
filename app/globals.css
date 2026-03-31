@@ -56,4 +56,22 @@ html, body {
   50% { box-shadow: 0 0 40px rgba(88, 166, 255, 0.25); }
 }
 
+@keyframes lamp-flicker {
+  0%, 100% { opacity: 0.95; }
+  5% { opacity: 0.85; }
+  10% { opacity: 0.97; }
+  50% { opacity: 0.92; }
+  55% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
 a { text-decoration: none; color: inherit; }
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+}

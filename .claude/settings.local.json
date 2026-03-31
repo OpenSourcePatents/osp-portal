@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/cjdow/osp-portal -maxdepth 2 -type f \\\\\\(-name tsconfig* -o -name eslint* -o -name .prettierrc* -o -name tailwind* -o -name vercel.json \\\\\\))",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
