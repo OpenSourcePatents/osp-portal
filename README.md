@@ -1,31 +1,48 @@
-# O.S.P. Portal — OpenSourcePatents Civic Intelligence Network
+# O.S.P. Portal — OpenSourcePatents
 
-Mission control dashboard linking to all OpenSourcePatents civic intelligence tools.
+Organizational hub for OpenSourcePatents. Five sections: Civic Arm, Mission, Services, Patents, Your Voice Matters.
 
-## Apps
+**Live:** opensourceforall.com
 
-|Module             |Description                                                               |Status        |
-|-------------------|--------------------------------------------------------------------------|--------------|
-|DOCKWATCH          |Community port intelligence — anonymous trafficking/exploitation reporting|Deploy Pending|
-|SENTINEL           |Government accountability & corruption detection                          |Deploy Pending|
-|NARC               |Opioid crisis geospatial intelligence                                     |Deploy Pending|
-|CONGRESSWATCH      |Congressional anomaly scoring                                             |Deploy Pending|
-|CANAAN ROAD WATCH  |Citizen road accountability — Canaan, NH                                  |Deploy Pending|
-|CANAAN BUDGET WATCH|Town budget transparency — Canaan, NH                                     |Deploy Pending|
+## Portfolio
 
-## Deploy
+### Civic Tools (Deployed)
+- [Canaan Road Watch](https://canaanroads.com) — Citizen road accountability, Canaan NH
+- [CongressWatch](https://congresswatch.vercel.app) — Congressional anomaly scoring
+- [Canaan Finance](https://www.canaan.finance) — Municipal budget transparency
+- [DockWatch](https://dockwatch.vercel.app) — Community port intelligence
 
-```bash
+### Civic Tools (In Development)
+- SENTINEL — Government accountability detection
+- GUARDIAN — Civic accountability platform
+- Citizens Shield — Public safety tools
+- Project NARC — Counter-fentanyl architecture
+- ANMP — Civic intelligence
+
+### Open Source Concepts
+- REHD — Recoil energy harvesting
+- REVOLT — Renewable energy system
+- THOR — Energy concept
+- Earth Pills — Environmental remediation
+- AIR-U — Air quality
+- GiveCoin — Fintech concept
+- FCK-U System — Open source
+- DraftProSe — USPTO patent figure generator
+
+### Restricted Portfolio
+One provisional patent application on file with USPTO (March 2026). Additional concepts in development. Some material subject to ITAR review. Contact opensourcepatents@gmail.com to request access.
+
+## Stack
+- Next.js 14 (App Router) — JavaScript, no TypeScript
+- Supabase (Auth + PostgreSQL + RLS + Storage)
+- Vercel (hosting)
+- CSS variables, inline styles — no UI libraries
+
+## Setup
+Run sql/schema.sql in Supabase SQL Editor first. Then:
 npm install
-npm run dev      # local dev at localhost:3000
-```
+npm run dev
 
-Push to GitHub → connect repo to Vercel → auto-deploys.
-
-## Update App URLs
-
-Edit the `APPS` array in `app/page.js` — replace `url: null` with the live URL for each app as you deploy them.
-
-## License
-
-CC0 Public Domain — OpenSourcePatents
+## Entity
+OpenSourcePatents LLC | New Hampshire | EIN: 41-5161754
+opensourcepatents@gmail.com | CC0 Public Domain — No royalty or charge. Ever.
