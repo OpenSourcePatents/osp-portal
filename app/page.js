@@ -5,14 +5,52 @@ import Link from 'next/link'
 import GridBackground from '@/components/GridBackground'
 import Nav from '@/components/Nav'
 
-// ─── Open Source Arm ────────────────────────────────────────
-const CIVIC_TOOLS = [
+// ─── Deployed Civic Tools ───────────────────────────────────
+const DEPLOYED_PROJECTS = [
+  {
+    name: 'CongressWatch',
+    desc: 'Congressional anomaly scoring — voting patterns, donor influence, insider trading signals.',
+    url: 'https://congresswatch.vercel.app',
+    color: '#3B82F6',
+  },
+  {
+    name: 'Canaan Road Watch',
+    desc: 'Citizen road accountability platform for Canaan, NH. Pothole tracking, grading failures, performance scoring.',
+    url: 'https://canaanroads.com',
+    color: '#EF4444',
+  },
+  {
+    name: 'Canaan Finance',
+    desc: 'Municipal budget transparency tool. Full NH DRA budget data, automated meeting minutes scraping, attendance tracking.',
+    url: 'https://canaan.finance',
+    color: '#22C55E',
+  },
+  {
+    name: 'DockWatch',
+    desc: 'Community port intelligence — anonymous citizen reporting of suspicious activity at shipping docks.',
+    url: 'https://dockwatch.vercel.app',
+    color: '#FF2E2E',
+  },
+]
+
+// ─── In Development ─────────────────────────────────────────
+const PENDING_PROJECTS = [
+  { name: 'SENTINEL', desc: 'Automated government anomaly detection.' },
+  { name: 'VIGIL', desc: 'Law enforcement accountability.' },
+  { name: 'AEGIS', desc: 'Prosecutorial accountability framework.' },
+  { name: 'GUARDIAN', desc: 'Government accountability ledger for child welfare and related government systems.' },
+  { name: 'Citizens\' Shield', desc: 'Constitutional accountability framework — modernized citizen arrest authority paired with mandatory body camera disclosure.' },
+  { name: 'Project NARC', desc: 'Counter-fentanyl architecture. Five-part system.' },
+]
+
+// ─── Section Links ──────────────────────────────────────────
+const SECTION_LINKS = [
   {
     href: '/civic',
-    name: 'Civic Intelligence',
-    desc: 'Public accountability platforms — CongressWatch, Canaan Road Watch, DockWatch, and more.',
+    name: 'All Civic Tools',
+    desc: 'Full directory of deployed and in-development public accountability platforms.',
     color: '#3FB950',
-    tag: 'FREE FOREVER',
+    tag: 'EXPLORE',
   },
   {
     href: '/patents',
@@ -39,6 +77,18 @@ const CIVIC_TOOLS = [
 
 // ─── Platform Arm ───────────────────────────────────────────
 const PLATFORMS = [
+  {
+    name: 'OSP Civic Data API',
+    desc: 'Free REST API aggregating congressional accountability data. Replaces ProPublica, OpenSecrets, and GovTrack. Campaign finance, stock trades, voting records, travel disclosures, and legislation.',
+    url: 'https://api.opensourceforall.com/docs',
+    color: '#58A6FF',
+    tag: 'FREE TIER AVAILABLE',
+    links: [
+      { label: 'API Docs', url: 'https://api.opensourceforall.com/docs' },
+      { label: 'Get API Key', url: 'https://api.opensourceforall.com/signup' },
+      { label: 'GitHub', url: 'https://github.com/OpenSourcePatents/OSP-API' },
+    ],
+  },
   {
     name: 'FundForge',
     desc: 'Transparent fundraising infrastructure. No middlemen, no platform fees on donations.',
@@ -153,9 +203,37 @@ function ArmCard({ item, index, isInternal }) {
       }}>
         {item.desc}
       </p>
+
+      {item.links && (
+        <div style={{
+          display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 14,
+        }}>
+          {item.links.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                padding: '5px 12px', borderRadius: 5,
+                background: 'var(--bg-elevated)', border: '1px solid var(--border-mid)',
+                fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 600,
+                color: item.color, letterSpacing: '0.04em',
+                transition: 'border-color 0.2s',
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   )
 
+  if (item.links) {
+    return <div style={{ display: 'block' }}>{inner}</div>
+  }
   if (isInternal) {
     return <Link href={item.href} style={{ display: 'block' }}>{inner}</Link>
   }
@@ -378,18 +456,79 @@ export default function Home() {
             </h2>
           </div>
           <p style={{
-            margin: '0 0 24px', fontSize: 14, color: 'var(--text-muted)',
+            margin: '0 0 28px', fontSize: 14, color: 'var(--text-muted)',
             paddingLeft: 15, lineHeight: 1.6,
           }}>
             Civic tools, patents, and platforms released for free under CC0 and Apache 2.0.
             No strings. No royalties. No exceptions.
           </p>
+
+          {/* Deployed Projects */}
+          <div style={{
+            fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 700,
+            color: 'var(--accent-green)', letterSpacing: '0.1em', marginBottom: 14,
+            paddingLeft: 15, display: 'flex', alignItems: 'center', gap: 6,
+          }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: 'var(--accent-green)',
+            }} />
+            DEPLOYED
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 14,
+            marginBottom: 28,
+          }}>
+            {DEPLOYED_PROJECTS.map((item) => (
+              <ArmCard key={item.name} item={{ ...item, tag: 'LIVE', color: item.color }} index={0} />
+            ))}
+          </div>
+
+          {/* In Development */}
+          <div style={{
+            fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 700,
+            color: 'var(--accent-yellow)', letterSpacing: '0.1em', marginBottom: 14,
+            paddingLeft: 15,
+          }}>
+            IN DEVELOPMENT
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 10,
+            marginBottom: 32,
+          }}>
+            {PENDING_PROJECTS.map((item) => (
+              <div key={item.name} style={{
+                background: 'rgba(13,17,23,0.5)',
+                border: '1px solid var(--border-dim)',
+                borderRadius: 8,
+                padding: '14px 16px',
+              }}>
+                <div style={{
+                  fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)',
+                  fontFamily: 'var(--font-mono)', marginBottom: 4,
+                }}>
+                  {item.name}
+                </div>
+                <div style={{
+                  fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5,
+                }}>
+                  {item.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Section Links */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
             gap: 14,
           }}>
-            {CIVIC_TOOLS.map((item, i) => (
+            {SECTION_LINKS.map((item, i) => (
               <ArmCard key={item.name} item={item} index={i} isInternal />
             ))}
           </div>
@@ -535,6 +674,11 @@ export default function Home() {
               }}>
                 PLATFORMS
               </div>
+              <a href="https://api.opensourceforall.com/docs" target="_blank" rel="noopener noreferrer" style={{
+                display: 'block', fontSize: 13, color: 'var(--text-muted)', marginBottom: 8,
+              }}>
+                Civic Data API
+              </a>
               <a href="https://fundforge.finance" target="_blank" rel="noopener noreferrer" style={{
                 display: 'block', fontSize: 13, color: 'var(--text-muted)', marginBottom: 8,
               }}>
